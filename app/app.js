@@ -1,4 +1,4 @@
-import { replyMessage } from '../utils/index.js';
+import { isAllowedUser, replyMessage } from '../utils/index.js';
 import {
   activateHandler,
   commandHandler,
@@ -45,6 +45,7 @@ const handleEvents = async (events = []) => (
         events
           .map((event) => new Event(event))
           .filter((event) => event.isMessage)
+          .filter((event) => isAllowedUser(event.userId))
           .filter((event) => event.isText || event.isAudio || event.isImage)
           .map((event) => new Context(event))
           .map((context) => context.initialize()),
