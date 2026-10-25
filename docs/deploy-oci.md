@@ -107,6 +107,18 @@ LINE_CHANNEL_SECRET=<line-channel-secret>
 
 > `APP_PORT` 與 `APP_DB_PATH` 由 `docker-compose.yaml` 固定設定，不需要填寫。
 
+**OpenAI API key 權限**：若使用 Restricted key，「Model capabilities」必須設為 **Write**（聊天、看圖、畫圖、語音轉文字都屬於這一項），設為 Read-only 會無法呼叫模型。
+
+**模型**：預設使用 `gpt-6-luna`（聊天與看圖），並送出 `reasoning_effort: none`。若改用不支援推理參數的舊模型（例如 `gpt-4o`），請將 `OPENAI_COMPLETION_REASONING_EFFORT` 設為空值。
+
+**限制使用者**：LINE 無法限制誰能加機器人為好友，因此請設定白名單，避免路人消耗 OpenAI 額度：
+
+```bash
+APP_ALLOWED_USER_IDS=U1234567890abcdef1234567890abcdef   # 多人以逗號分隔
+```
+
+自己的 user ID 可在 LINE Developers Console → 你的 channel →「Basic settings」→「Your user ID」找到。不在名單內的使用者，訊息會被直接忽略（不回覆、不寫入資料庫、不呼叫 OpenAI），在群組中也一樣。建議同時在 OpenAI 後台為這個 project 設定每月預算上限。
+
 容器以非 root 的 `node` 使用者（uid 1000）執行，資料目錄必須屬於該 uid：
 
 ```bash

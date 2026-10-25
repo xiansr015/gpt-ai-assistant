@@ -48,18 +48,21 @@ const hasImage = ({ messages }) => (
 const createChatCompletion = ({
   model = config.OPENAI_COMPLETION_MODEL,
   messages,
+  reasoningEffort = config.OPENAI_COMPLETION_REASONING_EFFORT,
   temperature = config.OPENAI_COMPLETION_TEMPERATURE,
   maxTokens = config.OPENAI_COMPLETION_MAX_TOKENS,
   frequencyPenalty = config.OPENAI_COMPLETION_FREQUENCY_PENALTY,
   presencePenalty = config.OPENAI_COMPLETION_PRESENCE_PENALTY,
 }) => {
+  // reasoning models reject `max_tokens` and non-default sampling parameters, so send them only when configured
   const body = {
     model: hasImage({ messages }) ? config.OPENAI_VISION_MODEL : model,
     messages,
-    temperature,
-    max_tokens: maxTokens,
-    frequency_penalty: frequencyPenalty,
-    presence_penalty: presencePenalty,
+    max_completion_tokens: maxTokens,
+    ...(reasoningEffort ? { reasoning_effort: reasoningEffort } : {}),
+    ...(temperature !== null ? { temperature } : {}),
+    ...(frequencyPenalty !== null ? { frequency_penalty: frequencyPenalty } : {}),
+    ...(presencePenalty !== null ? { presence_penalty: presencePenalty } : {}),
   };
   return client.post('/v1/chat/completions', body);
 };

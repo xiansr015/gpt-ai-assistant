@@ -11,6 +11,7 @@ import generateImage from './generate-image.js';
 import generateTranscription from './generate-transcription.js';
 import getCommand from './get-command.js';
 import getVersion from './get-version.js';
+import isAllowedUser from './is-allowed-user.js';
 import replyMessage from './reply-message.js';
 import validateSignature from './validate-signature.js';
 
@@ -28,6 +29,7 @@ export {
   generateTranscription,
   getCommand,
   getVersion,
+  isAllowedUser,
   replyMessage,
   validateSignature,
 };
