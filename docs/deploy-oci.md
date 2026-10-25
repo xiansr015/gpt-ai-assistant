@@ -71,11 +71,15 @@ docker compose version
 
 ## 4. 建立 Cloudflare Tunnel
 
-1. Cloudflare Dashboard →「Zero Trust → Networks → Tunnels → Create a tunnel」，類型選 **Cloudflared**，並為它命名。
+1. Cloudflare Dashboard →「Networking → Tunnels → Create a tunnel」，類型選 **Cloudflared**，並為它命名。
 2. 在安裝步驟選擇 **Docker**，複製指令中 `--token` 後面的那串 token（之後填入 `.env` 的 `TUNNEL_TOKEN`）。不需要執行頁面上的指令，`docker-compose.yaml` 已包含 `cloudflared` 服務。
-3. 在「Public Hostname」新增一筆：
-   - **Subdomain / Domain**：例如 `bot.example.com`
-   - **Service**：`HTTP`，URL 填 `app:3000`（Compose 內部網路的服務名稱）
+3. 回到「Networking → Tunnels」，點選剛建立的 tunnel →「Routes」分頁 →「Add route」→「Published application」：
+   - **Subdomain**：例如 `bot`（只能一層；多層子網域需要 Advanced Certificate）
+   - **Domain**：從下拉選單選你的網域
+   - **Path**：留空
+   - **Service URL**：`http://app:3000`（Compose 內部網路的服務名稱，不是 `localhost`）
+4. 按「Add route」，Cloudflare 會自動建立指向 tunnel 的 CNAME。
+5. 驗證：`curl -s -o /dev/null -w "%{http_code}\n" -X POST https://bot.example.com/webhook` 回應 `403`（簽章驗證擋下）即代表 tunnel 已通到 app。
 
 ## 5. 設定並啟動服務
 
