@@ -32,7 +32,10 @@ test('COMMAND_SYS_VERSION', async () => {
   const replies = results.map(({ messages }) => messages.map(({ text }) => text));
   expect(replies).toEqual(
     [
-      [t('__COMMAND_SYS_VERSION_REPLY')(current, isLatest)],
+      [
+        t('__COMMAND_SYS_VERSION_REPLY')(current, isLatest),
+        ...(isLatest ? [] : [t('__MESSAGE_NEW_VERSION_AVAILABLE')(latest)]),
+      ],
     ],
   );
 }, TIMEOUT);

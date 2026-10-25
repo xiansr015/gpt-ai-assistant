@@ -1,19 +1,23 @@
+import storage, { TABLE_HISTORIES } from '../../storage/index.js';
 import History from './history.js';
-
-const histories = new Map();
+import Message from './message.js';
 
 /**
  * @param {string} contextId
  * @returns {History}
  */
-const getHistory = (contextId) => histories.get(contextId) || new History();
+const getHistory = (contextId) => {
+  const history = new History();
+  const data = storage.getItem(TABLE_HISTORIES, contextId);
+  if (data) history.messages = data.messages.map((message) => new Message(message));
+  return history;
+};
 
 /**
  * @param {string} contextId
  * @param {History} history
- * @returns {History}
  */
-const setHistory = (contextId, history) => histories.set(contextId, history);
+const setHistory = (contextId, history) => storage.setItem(TABLE_HISTORIES, contextId, history);
 
 /**
  * @param {string} contextId
@@ -29,11 +33,11 @@ const updateHistory = (contextId, callback) => {
  * @param {string} userId
  */
 const removeHistory = (userId) => {
-  histories.delete(userId);
+  storage.removeItem(TABLE_HISTORIES, userId);
 };
 
 const printHistories = () => {
-  const messages = Array.from(histories.keys())
+  const messages = storage.keys(TABLE_HISTORIES)
     .filter((contextId) => getHistory(contextId).messages.length > 0)
     .map((contextId) => `\n=== ${contextId.slice(0, 6)} ===\n\n${getHistory(contextId).toString()}\n`);
   if (messages.length < 1) return;
@@ -48,4 +52,4 @@ export {
   printHistories,
 };
 
-export default histories;
+export default null;

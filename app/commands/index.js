@@ -27,7 +27,6 @@ import COMMAND_SUM_ENCOURAGE from './sum-encourage.js';
 import COMMAND_SUM_LAUGH from './sum-laugh.js';
 import COMMAND_SUM_SUM from './sum-sum.js';
 import COMMAND_SYS_COMMAND from './sys-command.js';
-import COMMAND_SYS_DEPLOY from './sys-deploy.js';
 import COMMAND_SYS_DOC from './sys-doc.js';
 import COMMAND_SYS_REPORT from './sys-report.js';
 import COMMAND_SYS_VERSION from './sys-version.js';
@@ -61,7 +60,6 @@ export const ALL_COMMANDS = [
   COMMAND_SUM_LAUGH,
   COMMAND_SUM_SUM,
   COMMAND_SYS_COMMAND,
-  COMMAND_SYS_DEPLOY,
   COMMAND_SYS_DOC,
   COMMAND_SYS_REPORT,
   COMMAND_SYS_VERSION,
@@ -122,7 +120,6 @@ export {
   COMMAND_SUM_LAUGH,
   COMMAND_SUM_SUM,
   COMMAND_SYS_COMMAND,
-  COMMAND_SYS_DEPLOY,
   COMMAND_SYS_DOC,
   COMMAND_SYS_REPORT,
   COMMAND_SYS_VERSION,

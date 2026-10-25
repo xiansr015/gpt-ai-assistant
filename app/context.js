@@ -20,18 +20,13 @@ import {
   ImageMessage, Message, TemplateMessage, TextMessage,
 } from './messages/index.js';
 import { Bot, Event, Source } from './models/index.js';
-import { getSources, setSources } from './repository/index.js';
+import { countSources, getSource, setSource } from './repository/index.js';
 
 class Context {
   /**
    * @type {Event}
    */
   event;
-
-  /**
-   * @type {Source}
-   */
-  source;
 
   /**
    * @type {string}
@@ -48,6 +43,13 @@ class Context {
    */
   constructor(event) {
     this.event = event;
+  }
+
+  /**
+   * @returns {Source}
+   */
+  get source() {
+    return new Source(getSource(this.id));
   }
 
   get id() {
@@ -139,43 +141,35 @@ class Context {
    * @throws {Error}
    */
   validate() {
-    const sources = getSources();
-    const groups = Object.values(sources).filter(({ type }) => type === SOURCE_TYPE_GROUP);
-    const users = Object.values(sources).filter(({ type }) => type === SOURCE_TYPE_USER);
-    if (this.event.isGroup && !sources[this.groupId] && groups.length >= config.APP_MAX_GROUPS) {
+    if (this.event.isGroup && !getSource(this.groupId) && countSources(SOURCE_TYPE_GROUP) >= config.APP_MAX_GROUPS) {
       throw new Error(t('__ERROR_MAX_GROUPS_REACHED'));
     }
-    if (!sources[this.userId] && users.length >= config.APP_MAX_USERS) {
+    if (!getSource(this.userId) && countSources(SOURCE_TYPE_USER) >= config.APP_MAX_USERS) {
       throw new Error(t('__ERROR_MAX_USERS_REACHED'));
     }
   }
 
   async register() {
-    const sources = getSources();
-    const newSources = {};
-    if (this.event.isGroup && !sources[this.groupId]) {
+    if (this.event.isGroup && !getSource(this.groupId)) {
       const { groupName } = await fetchGroup(this.groupId);
-      newSources[this.groupId] = new Source({
+      setSource(this.groupId, new Source({
         type: SOURCE_TYPE_GROUP,
         name: groupName,
         bot: new Bot({
           isActivated: !config.BOT_DEACTIVATED,
         }),
-      });
+      }));
     }
-    if (!sources[this.userId]) {
+    if (!getSource(this.userId)) {
       const { displayName } = await fetchUser(this.userId);
-      newSources[this.userId] = new Source({
+      setSource(this.userId, new Source({
         type: SOURCE_TYPE_USER,
         name: displayName,
         bot: new Bot({
           isActivated: !config.BOT_DEACTIVATED,
         }),
-      });
+      }));
     }
-    Object.assign(sources, newSources);
-    if (Object.keys(newSources).length > 0) await setSources(sources);
-    this.source = new Source(sources[this.id]);
   }
 
   async transcribeAudio() {

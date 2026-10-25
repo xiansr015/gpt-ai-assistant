@@ -1,1 +1,9 @@
 /node_modules
+/data
+/.git
+/.github
+/tests
+/demo
+.env
+.env.*
+!.env.example

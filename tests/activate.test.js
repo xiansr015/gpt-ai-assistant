@@ -3,7 +3,6 @@ import {
 } from '@jest/globals';
 import { getPrompt, handleEvents, removePrompt } from '../app/index.js';
 import { COMMAND_BOT_ACTIVATE, COMMAND_BOT_DEACTIVATE } from '../app/commands/index.js';
-import { t } from '../locales/index.js';
 import {
   createEvents, MOCK_TEXT_OK, MOCK_USER_01, TIMEOUT,
 } from './utils.js';
@@ -36,7 +35,6 @@ test('COMMAND_BOT_ACTIVATE', async () => {
   expect(replies).toEqual(
     [
       [
-        t('__ERROR_MISSING_ENV')('VERCEL_ACCESS_TOKEN'),
         COMMAND_BOT_ACTIVATE.reply,
       ],
       [MOCK_TEXT_OK],

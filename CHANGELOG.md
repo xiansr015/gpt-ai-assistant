@@ -1,5 +1,28 @@
 # Changelog
 
+## 5.0.0 (2026-10-25)
+
+### Breaking Changes
+
+- Require Node.js 26 or later
+- Remove Vercel deployment support, including `vercel.json` and all `VERCEL_*` environment variables
+- Remove `sys_deploy` (Restart) command
+- Data previously stored in the Vercel `APP_STORAGE` environment variable is not migrated; users and groups are registered again on their next message
+
+### New Features
+
+- Persist sources, histories and prompts in SQLite via the built-in `node:sqlite` module
+- Add `APP_DB_PATH` environment variable (default: `data/app.db`)
+- Add Cloudflare Tunnel service to `docker-compose.yaml`
+- Build and publish the Docker image to GHCR with GitHub Actions
+- Add deployment guide for OCI VM with Rocky Linux
+
+### Bug Fixes
+
+- Run the container as the non-root `node` user
+- Exclude `.env` files from the Docker build context
+- Update dependencies with security fixes
+
 ## 4.9.1 (2024-07-10)
 
 ### Bug Fixes

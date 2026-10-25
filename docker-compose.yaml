@@ -1,9 +1,23 @@
-version: "3"
-
 services:
   app:
     container_name: gpt-ai-assistant
+    image: ghcr.io/${GHCR_OWNER:?Set GHCR_OWNER in .env}/gpt-ai-assistant:${APP_IMAGE_TAG:-latest}
     build: .
     restart: always
-    ports:
-      - "${APP_PORT}:${APP_PORT}"
+    init: true
+    env_file: .env
+    environment:
+      APP_PORT: 3000
+      APP_DB_PATH: /app/data/app.db
+    volumes:
+      - ./data:/app/data:Z
+
+  cloudflared:
+    container_name: gpt-ai-assistant-tunnel
+    image: cloudflare/cloudflared:latest
+    restart: always
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN}
+    depends_on:
+      - app
