@@ -13,6 +13,7 @@ import getCommand from './get-command.js';
 import getVersion from './get-version.js';
 import isAllowedUser from './is-allowed-user.js';
 import replyMessage from './reply-message.js';
+import splitText from './split-text.js';
 import validateSignature from './validate-signature.js';
 
 export {
@@ -31,5 +32,6 @@ export {
   getVersion,
   isAllowedUser,
   replyMessage,
+  splitText,
   validateSignature,
 };

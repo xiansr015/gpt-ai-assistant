@@ -9,6 +9,7 @@ export const SOURCE_TYPE_USER = 'user';
 export const SOURCE_TYPE_GROUP = 'group';
 
 export const MESSAGE_TYPE_TEXT = 'text';
+export const MESSAGE_TEXT_MAX_LENGTH = 5000;
 export const MESSAGE_TYPE_STICKER = 'sticker';
 export const MESSAGE_TYPE_AUDIO = 'audio';
 export const MESSAGE_TYPE_IMAGE = 'image';

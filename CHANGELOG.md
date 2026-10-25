@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.2.0 (2026-10-25)
+
+### New Features
+
+- Split replies longer than 5,000 characters into multiple LINE messages
+
+### Bug Fixes
+
+- Raise defaults that were limited by Vercel: `OPENAI_COMPLETION_MAX_TOKENS` (64 → 1024), `APP_API_TIMEOUT` (9s → 30s), `APP_MAX_PROMPT_TOKENS` (256 → 4096) and `APP_MAX_PROMPT_MESSAGES` (4 → 20)
+
 ## 5.1.0 (2026-10-25)
 
 ### New Features
