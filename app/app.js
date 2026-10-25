@@ -4,7 +4,6 @@ import {
   commandHandler,
   continueHandler,
   deactivateHandler,
-  deployHandler,
   docHandler,
   drawHandler,
   forgetHandler,
@@ -27,7 +26,6 @@ const handleContext = async (context) => (
   || commandHandler(context)
   || continueHandler(context)
   || deactivateHandler(context)
-  || deployHandler(context)
   || docHandler(context)
   || drawHandler(context)
   || forgetHandler(context)

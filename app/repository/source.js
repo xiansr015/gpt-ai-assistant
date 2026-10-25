@@ -1,30 +1,37 @@
-import storage from '../../storage/index.js';
+import storage, { TABLE_SOURCES } from '../../storage/index.js';
 import { Source } from '../models/index.js';
 
-const FIELD_KEY = 'sources';
+/**
+ * @param {string} id
+ * @returns {Source|undefined}
+ */
+const getSource = (id) => storage.getItem(TABLE_SOURCES, id);
 
 /**
- * @returns {Object.<string, Source>}
+ * @param {string} id
+ * @param {Source} source
  */
-const getSources = () => storage.getItem(FIELD_KEY) || {};
+const setSource = (id, source) => storage.setItem(TABLE_SOURCES, id, source);
 
 /**
- * @param {Object.<string, Source>} sources
+ * @param {string} type
+ * @returns {number}
  */
-const setSources = (sources) => storage.setItem(FIELD_KEY, sources);
+const countSources = (type) => storage.count(TABLE_SOURCES, 'type', type);
 
 /**
  * @param {string} contextId
  * @param {function(Source)} callback
  */
-const updateSources = async (contextId, callback) => {
-  const sources = getSources();
-  callback(sources[contextId]);
-  await setSources(sources);
+const updateSource = (contextId, callback) => {
+  const source = getSource(contextId);
+  callback(source);
+  setSource(contextId, source);
 };
 
 export {
-  getSources,
-  setSources,
-  updateSources,
+  getSource,
+  setSource,
+  countSources,
+  updateSource,
 };

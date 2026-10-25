@@ -1,31 +1,37 @@
+import storage, { TABLE_PROMPTS } from '../../storage/index.js';
+import Message from './message.js';
 import Prompt from './prompt.js';
-
-const prompts = new Map();
 
 /**
  * @param {string} userId
  * @returns {Prompt}
  */
-const getPrompt = (userId) => prompts.get(userId) || new Prompt();
+const getPrompt = (userId) => {
+  const prompt = new Prompt();
+  const data = storage.getItem(TABLE_PROMPTS, userId);
+  if (data) prompt.messages = data.messages.map((message) => new Message(message));
+  return prompt;
+};
 
 /**
  * @param {string} userId
  * @param {Prompt} prompt
  */
 const setPrompt = (userId, prompt) => {
-  prompts.set(userId, prompt);
+  storage.setItem(TABLE_PROMPTS, userId, prompt);
 };
 
 /**
  * @param {string} userId
  */
 const removePrompt = (userId) => {
-  prompts.delete(userId);
+  storage.removeItem(TABLE_PROMPTS, userId);
 };
 
 const printPrompts = () => {
-  if (Array.from(prompts.keys()).length < 1) return;
-  const content = Array.from(prompts.keys()).map((userId) => `\n=== ${userId.slice(0, 6)} ===\n${getPrompt(userId)}\n`).join('');
+  const userIds = storage.keys(TABLE_PROMPTS);
+  if (userIds.length < 1) return;
+  const content = userIds.map((userId) => `\n=== ${userId.slice(0, 6)} ===\n${getPrompt(userId)}\n`).join('');
   console.info(content);
 };
 
@@ -37,4 +43,4 @@ export {
   printPrompts,
 };
 
-export default prompts;
+export default null;
