@@ -16,6 +16,12 @@ GPT AI Assistant is an application that is implemented using the OpenAI API and 
 - <a href="https://memochou1993.github.io/gpt-ai-assistant-docs/" target="_blank">中文</a>
 - <a href="https://memochou1993.github.io/gpt-ai-assistant-docs/en" target="_blank">English</a>
 
+## Deployment
+
+Since 5.0.0, the application runs as a self-hosted, stateful service: state is persisted in SQLite, and it is deployed with Docker Compose behind a Cloudflare Tunnel. Vercel is no longer supported.
+
+- [部署到 OCI VM（Rocky Linux）](docs/deploy-oci.md)
+
 ## Credits
 
 - [jayer95](https://github.com/jayer95) - Debugging and testing
