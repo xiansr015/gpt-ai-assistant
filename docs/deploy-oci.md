@@ -79,7 +79,12 @@ docker compose version
    - **Path**：留空
    - **Service URL**：`http://app:3000`（Compose 內部網路的服務名稱，不是 `localhost`）
 4. 按「Add route」，Cloudflare 會自動建立指向 tunnel 的 CNAME。
-5. 驗證：`curl -s -o /dev/null -w "%{http_code}\n" -X POST https://bot.example.com/webhook` 回應 `403`（簽章驗證擋下）即代表 tunnel 已通到 app。
+5. 驗證（回應 `403` 代表請求已經過 tunnel 抵達 app，並被簽章驗證擋下；`502` / `530` 則代表 tunnel 沒連到 app）：
+
+   ```bash
+   curl -s -o /dev/null -w "%{http_code}\n" -X POST https://bot.example.com/webhook \
+     -H 'content-type: application/json' -H 'x-line-signature: invalid' -d '{"events":[]}'
+   ```
 
 ## 5. 設定並啟動服務
 
