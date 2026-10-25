@@ -3,11 +3,12 @@ import fs from 'fs';
 import config from '../config/index.js';
 import { t } from '../locales/index.js';
 import {
-  MESSAGE_TYPE_IMAGE, MESSAGE_TYPE_TEXT, SOURCE_TYPE_GROUP, SOURCE_TYPE_USER,
+  MESSAGE_TEXT_MAX_LENGTH, MESSAGE_TYPE_IMAGE, MESSAGE_TYPE_TEXT, SOURCE_TYPE_GROUP, SOURCE_TYPE_USER,
 } from '../services/line.js';
 import {
   addMark,
   convertText,
+  splitText,
   fetchAudio,
   fetchImage,
   fetchGroup,
@@ -208,12 +209,15 @@ class Context {
    */
   pushText(text, actions = []) {
     if (!text) return this;
-    const message = new TextMessage({
-      type: MESSAGE_TYPE_TEXT,
-      text: convertText(text),
+    const chunks = splitText(convertText(text), MESSAGE_TEXT_MAX_LENGTH);
+    chunks.forEach((chunk, i) => {
+      const message = new TextMessage({
+        type: MESSAGE_TYPE_TEXT,
+        text: chunk,
+      });
+      if (i === chunks.length - 1) message.setQuickReply(actions);
+      this.messages.push(message);
     });
-    message.setQuickReply(actions);
-    this.messages.push(message);
     return this;
   }
 
