@@ -1,5 +1,18 @@
 # Changelog
 
+## 5.1.0 (2026-10-25)
+
+### New Features
+
+- Add `APP_ALLOWED_USER_IDS` environment variable to only respond to listed users
+- Add `OPENAI_COMPLETION_REASONING_EFFORT` environment variable (default: `none`)
+
+### Bug Fixes
+
+- Use `gpt-6-luna` as the default completion and vision model, since `gpt-3.5-turbo` was shut down
+- Send `max_completion_tokens` instead of `max_tokens`, and send sampling parameters only when configured
+- Allow `APP_MAX_GROUPS` and `APP_MAX_USERS` to be set to `0`
+
 ## 5.0.0 (2026-10-25)
 
 ### Breaking Changes
